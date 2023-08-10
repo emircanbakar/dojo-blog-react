@@ -1,43 +1,39 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import BlogList from "./BlogList.js";
 
 const Home = () => {
 
-    // let name = "Emir"
-    // const [name , setName] = useState("Emir")
-    // const [age, setAge] = useState(25)
-    // const handleClick = () => {
-    //     setName("can")
-    //     setAge(30)
-    // }
-    // const handleClickAgain = (name) => {
-    //     console.log("hi " + name)
-    // }
+    const [blogs, setBlogs] = useState(null)
+    const [isPending, setIsPending] = useState(true)
+    const [error, setError] = useState(null)
 
-    const [blogs, setBlogs] = useState([
-        { title: "My website", body: "lorem ipsum....", author: "emir", id: 1 },
-        { title: "React lessons", body: "lorem ipsum....", author: "can", id: 2 },
-        { title: "Being a developer intern", body: "lorem ipsum....", author: "bakar", id: 3 }
-    ])
-
-    const handleDelete = (id) =>{
-        const newBlogs = blogs.filter(blog => blog.id !== id)
-        setBlogs(newBlogs)
-    }
+    //npx json-server --watch data/db.json --port 8000
+    useEffect(() => {
+        setTimeout(() => {
+            fetch("http://localhost:8000/blogs")
+                .then(response => {
+                    if(!response.ok){
+                        throw Error("couldn't fetch the data")
+                    }
+                    return response.json()
+                })
+                .then(data => {
+                    setBlogs(data)
+                    setIsPending(false)
+                    setError(null)
+                })
+                .catch((err) =>{
+                    setIsPending(false)
+                    setError(err.message)
+                })
+        }, 750)
+    }, [])
 
     return (
         <div className="home">
-            <BlogList blogs={blogs} title="All Blogs" handleDelete={handleDelete} />
-            <BlogList blogs={blogs.filter((blog) => (blog.author === "emir"))} title="Creator's Blog" />
-
-
-
-
-            {/* <p>{ name } is {age} years old. </p>
-            <button onClick={handleClick} >Click Me</button> */}
-            {/* <button onClick={() => {
-                handleClickAgain("emir")
-            }} >Click Me Again</button> */}
+            { error && <div> {error} </div>}
+            {isPending && <div>Loading...</div>}
+            {blogs && <BlogList blogs={blogs} title="All Blogs" />}
         </div>
     );
 }
