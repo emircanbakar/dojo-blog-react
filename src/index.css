@@ -54,3 +54,24 @@
   color: #f1356d;
   margin-bottom: 8px;
 }
+
+.blog-preview a{
+  text-decoration: none;
+}
+
+.blog-details h2 {
+  font-size: 24px;
+  color: #f1356d;
+  margin-bottom: 12px;
+}
+.blog-details div {
+  margin: 16px 0;
+}
+.blog-details button {
+  background: #f1356d;
+  color: #fff;
+  border: 0;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+}

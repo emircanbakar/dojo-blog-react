@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 
 //"npx json-server --watch data/db.json --port 8000"
-const useFetch = (url) =>{
+const useFetch = (url) => {
 
     const [data, setData] = useState(null)
     const [isPending, setIsPending] = useState(true)
@@ -12,7 +12,7 @@ const useFetch = (url) =>{
         setTimeout(() => {
             fetch(url)
                 .then(response => {
-                    if(!response.ok){
+                    if (!response.ok) {
                         throw Error("couldn't fetch the data")
                     }
                     return response.json()
@@ -22,14 +22,15 @@ const useFetch = (url) =>{
                     setIsPending(false)
                     setError(null)
                 })
-                .catch((err) =>{
+                .catch((err) => {
                     setIsPending(false)
                     setError(err.message)
                 })
-        }, 750)
-    }, [])
+        }, 500)
 
-    return {data, isPending, error}
+    }, [url])
+
+    return { data, isPending, error }
 }
 
 export default useFetch;
